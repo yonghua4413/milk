@@ -8,12 +8,13 @@
  * © Milk framework
  */
 
-namespace milk;
+namespace Milk;
 
-class Ram
+class Build extends Ram
 {
-    protected function getUrl()
+    public function start()
     {
-        echo 'url';
+        // echo 'ram'
+        self::getUrl();
     }
 }

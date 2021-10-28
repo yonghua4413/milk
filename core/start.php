@@ -8,7 +8,7 @@
  * © Milk framework
  */
 
-namespace milk;
+namespace Milk;
 
 ini_set('error_reporting', E_ALL);
 

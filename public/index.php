@@ -8,7 +8,7 @@
  * © Milk framework
  */
 
-namespace milk;
+namespace Milk;
 
 register_shutdown_function(function () {
     if (error_get_last()['message'] == null)
@@ -18,6 +18,7 @@ register_shutdown_function(function () {
     $html = "[{$type}] Error in $file line {$line} <br> <h2>{$message}</h2>";
     echo $html;
 });
+
 $start = realpath('') . '/../core/start.php';
 
 require_once $start;

@@ -8,21 +8,40 @@
  * © Milk framework
  */
 
-namespace milk;
+namespace Milk;
 
-class App extends Ram
+use InflateContext;
+
+class App
 {
-
+    /**
+     * @desc 自动加载
+     */
     public function autoload($className)
     {
-        echo $className;
+        $path = __DIR__;
+        // 判断是框架类还是用户类
+        if (strpos($className, __NAMESPACE__) === false) {
+            $path = APP_PATH;
+        }
+        // 拼接路径
+        $className = $path . DIRECTORY_SEPARATOR . $className . PHP_EXT;
+        // 处理路径
+        $className = str_replace(['\\', 'app/', '//'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, ''], $className);
+        if (!file_exists($className)) {
+            echo "\"{$className}\" class not found. \r\n";
+        }
+        include $className;
     }
 
+    /**
+     * @desc 框架启动
+     */
     public function start()
     {
         spl_autoload_register([$this, 'autoload']);
-        echo 'app in come';
-        // self::getUrl();
+        $build = new Build();
+        $build->start();
         spl_autoload_unregister([$this, 'autoload']);
     }
 }
