@@ -21,17 +21,19 @@ class Ram
             $classNameFile = 'index' . DIRECTORY_SEPARATOR . 'index' . DIRECTORY_SEPARATOR . 'index';
         } else {
             $classNameFile = $QUERY_STRING;
+            $classNameFile = str_replace(['s=//', HTML_EXT], ['', ''], $classNameFile);
         }
         echo '<pre>';
         var_dump($QUERY_STRING);
         // 获取要执行的方法
-        $action = explode(DIRECTORY_SEPARATOR, $classNameFile)[2];
+        $action = explode('/', $classNameFile)[2];
+        // $action = explode(DIRECTORY_SEPARATOR, $classNameFile)[2];
 
         // 处理url index/index/index => index/controller/Index.php
-        $str = substr($classNameFile, 0, strrpos($classNameFile, DIRECTORY_SEPARATOR));
-        $arr = explode(DIRECTORY_SEPARATOR, $str);
+        $str = substr($classNameFile, 0, strrpos($classNameFile, '/'));
+        $arr = explode('/', $str);
         array_splice($arr, -1, 1, ['controller', ucfirst($arr[1])]);
-        $classNameFile = join(DIRECTORY_SEPARATOR, $arr);
+        $classNameFile = join('/', $arr);
         $file = APP_PATH . $classNameFile . PHP_EXT;
 
         // 引用控制器文件
@@ -60,15 +62,5 @@ class Ram
             echo '<pre>';
             var_dump($res);
         }
-
-        // $rest = call_user_func([$obj, self::$action]);
-        // if (is_string($rest)) {
-        //     echo $rest;
-        // } elseif (is_array($rest)) {
-        //     print_r($rest);
-        // }
-
-
-
     }
 }

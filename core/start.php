@@ -18,6 +18,7 @@ define('CONFIG_PATH', ROOT_PATH . 'config/');
 define('RUNTIME', ROOT_PATH . 'runtime/');
 
 define('PHP_EXT', '.php');
+define('HTML_EXT', '.html');
 
 // include_once 
 $appPath = __DIR__ . '/lib/App.php';
