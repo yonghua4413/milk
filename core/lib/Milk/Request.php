@@ -13,9 +13,10 @@ namespace Milk;
 class Request
 {
 
-    public static function param()
+    public static function param($key = '')
     {
-        echo $_SERVER['REQUEST_URI'];
+        $get = self::get($key);
+        return empty($get) ? self::post($key) : $get;
     }
 
     /**
@@ -41,7 +42,7 @@ class Request
      * @param $data
      * @return mixed|string
      */
-    public static function filter($data)
+    private static function filter($data)
     {
         if (is_array($data)) {
             foreach ($data as $k => $v) {
@@ -53,50 +54,14 @@ class Request
         return $data;
     }
 
-    // public static function get($key = '')
-    // {
-    //     if (strpos(basename($_SERVER['REQUEST_URI']), '?s=') === false) {
-    //         if (isset($_GET['s'])) {
-    //             unset($_GET['s']);
-    //         }
-    //     }
-    //     if (isset($_SERVER['SCRIPT_URL'])) {
-    //         $url = str_replace('.', '_', $_SERVER['SCRIPT_URL']);
-    //         if (isset($_GET[$url])) {
-    //             unset($_GET[$url]);
-    //         }
-    //     }
-    //     return $key == '' ? self::filter($_GET) : self::filter($_GET[$key]);
-    // }
+    public static function get($key = '')
+    {
+        if (isset($_GET['s'])) unset($_GET['s']);
+        return $key == '' ? self::filter($_GET) : self::filter($_GET[$key]);
+    }
 
-    // /**
-    //  * 获取post请求参数
-    //  * @param string $key
-    //  * @return mixed|string
-    //  */
-    // public static function post($key = '')
-    // {
-    //     return $key == '' ? self::filter($_POST) : self::filter($_POST[$key]);
-    // }
-
-    /**
-     * 获取get请求参数
-     * @param string $key
-     * @return mixed|string
-     */
-    // public static function get($key = '')
-    // {
-    //     if (strpos(basename($_SERVER['REQUEST_URI']), '?s=') === false) {
-    //         if (isset($_GET['s'])) {
-    //             unset($_GET['s']);
-    //         }
-    //     }
-    //     if (isset($_SERVER['SCRIPT_URL'])) {
-    //         $url = str_replace('.', '_', $_SERVER['SCRIPT_URL']);
-    //         if (isset($_GET[$url])) {
-    //             unset($_GET[$url]);
-    //         }
-    //     }
-    //     return $key == '' ? self::filter($_GET) : self::filter($_GET[$key]);
-    // }
+    public static function post($key = '')
+    {
+        return $key == '' ? self::filter($_POST) : self::filter($_POST[$key]);
+    }
 }

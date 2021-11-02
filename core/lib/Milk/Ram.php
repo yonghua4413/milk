@@ -29,8 +29,8 @@ class Ram
             }
         }
 
-        echo '<pre>';
-        var_dump($QUERY_STRING);
+        // echo '<pre>';
+        // var_dump($QUERY_STRING);
         // 获取要执行的方法
         $action = explode('/', $classNameFile)[2];
         // $action = explode(DIRECTORY_SEPARATOR, $classNameFile)[2];

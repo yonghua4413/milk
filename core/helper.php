@@ -20,6 +20,7 @@ register_shutdown_function(function () {
 
 function halt($var)
 {
+    echo '<pre>';
     var_dump($var);
     exit();
 }
