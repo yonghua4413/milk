@@ -27,10 +27,11 @@ class App
         // 拼接路径
         $className = $path . DIRECTORY_SEPARATOR . $className . PHP_EXT;
         // 处理路径
-        $className = str_replace(['\\', 'app/', '//'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, ''], $className);
+        $className = str_replace(['\\', 'app' . DIRECTORY_SEPARATOR, '//'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, ''], $className);
         if (!file_exists($className)) {
             echo "\"{$className}\" class not found. \r\n";
         }
+        echo $className . '<br>';
         include $className;
     }
 
