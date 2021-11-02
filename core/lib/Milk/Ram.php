@@ -22,7 +22,13 @@ class Ram
         } else {
             $classNameFile = $QUERY_STRING;
             $classNameFile = str_replace(['s=//', HTML_EXT], ['', ''], $classNameFile);
+            // 取消参数
+            $position = strpos($classNameFile, '&');
+            if ($position !== false) {
+                $classNameFile = substr($classNameFile, 0, $position);
+            }
         }
+
         echo '<pre>';
         var_dump($QUERY_STRING);
         // 获取要执行的方法
