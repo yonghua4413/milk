@@ -22,16 +22,16 @@ class App
         $path = __DIR__;
         // 判断是框架类还是用户类
         if (strpos($className, __NAMESPACE__) === false) {
-            $path = APP_PATH;
+            $path = ROOT_PATH;
         }
         // 拼接路径
         $className = $path . DIRECTORY_SEPARATOR . $className . PHP_EXT;
         // 处理路径
-        $className = str_replace(['\\', 'app' . DIRECTORY_SEPARATOR, '//'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, ''], $className);
+        $className = str_replace(['\\', 'app', '//'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR . 'app', ''], $className);
         if (!file_exists($className)) {
             echo "\"{$className}\" class not found. \r\n";
         }
-        echo $className . '<br>';
+
         include $className;
     }
 

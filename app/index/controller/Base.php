@@ -9,6 +9,6 @@ class Base extends Controller
 
     public function arr()
     {
-        halt('123');
+        echo '我是base';
     }
 }

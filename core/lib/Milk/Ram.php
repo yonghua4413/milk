@@ -12,7 +12,54 @@ namespace Milk;
 
 class Ram
 {
-    protected function getUrl()
+
+    protected function funcExist($obj, $action)
+    {
+        if (!method_exists($obj, $action)) {
+            echo "class " . get_class($obj) . " has not " . $action . " method.\r\n";
+        }
+    }
+
+    protected function handleClass($classNameFile)
+    {
+        // 获取控制器类
+        return 'app\\' . str_replace(array(PHP_EXT, '/'), array('', '\\'), $classNameFile);
+    }
+
+    protected function handleUserClass($classNameFile)
+    {
+        return APP_PATH . $classNameFile . PHP_EXT;
+    }
+
+    protected function includeFile($file)
+    {
+        // 引用控制器文件
+        if (!file_exists($file)) {
+            echo "【{$file}】 file not find.\r\n";
+        } else {
+            include $file;
+        }
+    }
+
+    protected function handleClassFile($className)
+    {
+        // 处理url index/index/index => index/controller/Test
+        $str = substr($className, 0, strrpos($className, '/'));
+        $arr = explode('/', $str);
+        array_splice($arr, -1, 1, ['controller', ucfirst($arr[1])]);
+        $className = join('/', $arr);
+        return $className;
+    }
+
+    protected function cancelArgs($controller)
+    {
+        $position = strpos($controller, '&');
+        if ($position !== false)
+            $controller = substr($controller, 0, $position);
+        return $controller;
+    }
+
+    protected function getController()
     {
         // 获得控制器文件
         extract($_SERVER);
@@ -22,51 +69,7 @@ class Ram
         } else {
             $classNameFile = $QUERY_STRING;
             $classNameFile = str_replace(['s=//', HTML_EXT], ['', ''], $classNameFile);
-            // 取消参数
-            $position = strpos($classNameFile, '&');
-            if ($position !== false) {
-                $classNameFile = substr($classNameFile, 0, $position);
-            }
         }
-
-        // echo '<pre>';
-        // var_dump($classNameFile);
-        // 获取要执行的方法
-        $action = explode('/', $classNameFile)[2];
-        // $action = explode(DIRECTORY_SEPARATOR, $classNameFile)[2];
-
-        // 处理url index/index/index => index/controller/Index.php
-        $str = substr($classNameFile, 0, strrpos($classNameFile, '/'));
-        $arr = explode('/', $str);
-        array_splice($arr, -1, 1, ['controller', ucfirst($arr[1])]);
-        $classNameFile = join('/', $arr);
-        $file = APP_PATH . $classNameFile . PHP_EXT;
-
-        // 引用控制器文件
-        if (!file_exists($file)) {
-            echo "【{$file}】 file not find.\r\n";
-        } else {
-            include $file;
-        }
-
-        // 获取控制器类
-        $classNameFile = 'app\\' . str_replace(array(PHP_EXT, '/'), array('', '\\'), $classNameFile);
-        // echo $classNameFile;
-
-        // 判断控制器的是否存在
-        $obj = new $classNameFile;
-        if (!method_exists($obj, $action)) {
-            echo "class " . get_class($obj) . " has not " . $action . " method.\r\n";
-        }
-
-        // 开始执行
-        $res = call_user_func([$obj, $action]);
-
-        if (is_string($res)) {
-            echo $res;
-        } elseif (is_array($res)) {
-            echo '<pre>';
-            var_dump($res);
-        }
+        return $classNameFile;
     }
 }
