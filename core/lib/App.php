@@ -10,23 +10,21 @@
 
 namespace Milk;
 
-use InflateContext;
-
 class App
 {
     /**
-     * @desc 自动加载
+     * autoload
      */
-    public function autoload($className)
+    public function autoload($class)
     {
         $path = __DIR__;
-        // 判断是框架类还是用户类
-        if (strpos($className, __NAMESPACE__) === false) {
+        // Framework class or User class
+        if (strpos($class, __NAMESPACE__) === false) {
             $path = ROOT_PATH;
         }
-        // 拼接路径
-        $className = $path . DIRECTORY_SEPARATOR . $className . PHP_EXT;
-        // 处理路径
+        // Splicing path
+        $className = $path . DIRECTORY_SEPARATOR . $class . PHP_EXT;
+        // Handle path
         $className = str_replace(['\\', 'app', '//'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR . 'app', ''], $className);
         if (!file_exists($className)) {
             echo "\"{$className}\" class not found. \r\n";
@@ -36,7 +34,7 @@ class App
     }
 
     /**
-     * @desc 框架启动
+     * framework start
      */
     public function start()
     {

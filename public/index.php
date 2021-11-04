@@ -10,6 +10,5 @@
 
 namespace Milk;
 
-
 require_once realpath('') . '/../core/helper.php';
 require_once realpath('') . '/../core/start.php';

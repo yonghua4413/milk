@@ -14,24 +14,71 @@ class Build extends Ram
 {
     public function start()
     {
-        $controller = self::getController();
-        $url = self::cancelArgs($controller);
+        $controller = $this->getController();
+        $url = $this->cancelArgs($controller);
 
-        // 获取要执行的方法
+        // get action
         $action = explode('/', $url)[2];
 
-        $className = self::handleClassFile($url);
-        self::includeFile(self::handleUserClass($className));
-        $classNameFile = self::handleClass($className);
+        $className = $this->handleClassFile($url);
+        Ram::includeFile($this->handleUserClass($className));
+        $classNameFile = $this->handleClass($className);
         $obj = new $classNameFile;
-        self::funcExist($obj, $action);
+        $this->funcExist($obj, $action);
 
-        // 开始执行
+        // start
         $res = call_user_func([$obj, $action]);
         if (is_string($res)) {
             echo $res;
         } elseif (is_array($res)) {
             halt($res);
         }
+    }
+    private  function funcExist($obj, $action)
+    {
+        if (!method_exists($obj, $action)) {
+            echo "class " . get_class($obj) . " has not " . $action . " method.\r\n";
+        }
+    }
+
+    private function handleClass($classNameFile)
+    {
+        return 'app\\' . str_replace(array(PHP_EXT, '/'), array('', '\\'), $classNameFile);
+    }
+
+    private function handleUserClass($classNameFile)
+    {
+        return APP_PATH . $classNameFile . PHP_EXT;
+    }
+
+    private function handleClassFile($className)
+    {
+        // handle url index/index/index => index/controller/Test
+        $str = substr($className, 0, strrpos($className, '/'));
+        $arr = explode('/', $str);
+        array_splice($arr, -1, 1, ['controller', ucfirst($arr[1])]);
+        $className = join('/', $arr);
+        return $className;
+    }
+
+    private function cancelArgs($controller)
+    {
+        $position = strpos($controller, '&');
+        if ($position !== false)
+            $controller = substr($controller, 0, $position);
+        return $controller;
+    }
+
+    private function getController()
+    {
+        extract($_SERVER);
+        $classNameFile = '';
+        if (empty($QUERY_STRING)) {
+            $classNameFile = 'index' . DIRECTORY_SEPARATOR . 'index' . DIRECTORY_SEPARATOR . 'index';
+        } else {
+            $classNameFile = $QUERY_STRING;
+            $classNameFile = str_replace(['s=//', HTML_EXT], ['', ''], $classNameFile);
+        }
+        return $classNameFile;
     }
 }

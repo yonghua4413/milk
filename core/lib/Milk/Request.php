@@ -20,7 +20,7 @@ class Request
     }
 
     /**
-     * 判断是否是GET请求
+     * is get request
      * @return bool
      */
     public static function isGet()
@@ -29,7 +29,7 @@ class Request
     }
 
     /**
-     * 判断是否是POST请求
+     * is post request
      * @return bool
      */
     public static function isPost()
@@ -38,8 +38,8 @@ class Request
     }
 
     /**
-     * 过滤请求参数
-     * @param $data
+     * filter request args
+     * @param mixed|string
      * @return mixed|string
      */
     private static function filter($data)
