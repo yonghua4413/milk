@@ -25,7 +25,7 @@ class Build extends Ram
         $classNameFile = $this->handleClass($className);
         $obj = new $classNameFile;
         $this->funcExist($obj, $action);
-        
+
         // start
         $res = call_user_func([$obj, $action]);
         if (is_string($res)) {
@@ -74,7 +74,7 @@ class Build extends Ram
         extract($_SERVER);
         $classNameFile = '';
         if (empty($QUERY_STRING)) {
-            $classNameFile = 'index' . DIRECTORY_SEPARATOR . 'index' . DIRECTORY_SEPARATOR . 'index';
+            $classNameFile = 'index' . '/' . 'index' . '/' . 'index';
         } else {
             $classNameFile = $QUERY_STRING;
             $classNameFile = str_replace(['s=//', HTML_EXT], ['', ''], $classNameFile);
