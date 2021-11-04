@@ -25,7 +25,7 @@ class Build extends Ram
         $classNameFile = $this->handleClass($className);
         $obj = new $classNameFile;
         $this->funcExist($obj, $action);
-
+        
         // start
         $res = call_user_func([$obj, $action]);
         if (is_string($res)) {
