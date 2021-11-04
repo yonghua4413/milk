@@ -34,7 +34,7 @@ class Build extends Ram
             halt($res);
         }
     }
-    private  function funcExist($obj, $action)
+    private function funcExist($obj, $action)
     {
         if (!method_exists($obj, $action)) {
             echo "class " . get_class($obj) . " has not " . $action . " method.\r\n";
@@ -74,7 +74,10 @@ class Build extends Ram
         extract($_SERVER);
         $classNameFile = '';
         if (empty($QUERY_STRING)) {
-            $classNameFile = 'index' . '/' . 'index' . '/' . 'index';
+            self::$module = Config::get('app.default_module') ?: 'index';
+            self::$controller = Config::get('app.default_controller') ?: 'index';
+            self::$action = Config::get('app.default_action') ?: 'index';
+            $classNameFile = self::$module . '/' . self::$controller . '/' . self::$action;
         } else {
             $classNameFile = $QUERY_STRING;
             $classNameFile = str_replace(['s=//', HTML_EXT], ['', ''], $classNameFile);

@@ -12,6 +12,13 @@ namespace Milk;
 
 class Ram
 {
+    protected static $module = '';
+
+    protected static $controller = '';
+
+    protected static $action = '';
+
+
     protected static function includeFile($file)
     {
         if (!file_exists($file)) {

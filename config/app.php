@@ -10,7 +10,11 @@
 
 return [
     // 调试模式
-    'debug' =>  true,
-    // 日志
-    'log' => true
+    'debug'                 =>  true,
+    // 默认模块
+    'default_module'        => 'index',
+    // 默认控制器
+    'default_controller'    => 'index',
+    // 默认方法
+    'default_action'        => 'index',
 ];
