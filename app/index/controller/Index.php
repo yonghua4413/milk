@@ -4,6 +4,7 @@ namespace app\index\controller;
 
 use Milk\Controller;
 use Milk\Db;
+use Milk\View;
 
 class Index extends Controller
 {
@@ -12,7 +13,10 @@ class Index extends Controller
     {
         echo 'hello world';
         echo '<br>';
-        halt($this->request->param());
+        
+        View::fetch();
+        // halt($this->request->param())
+        // halt($this->request->param());
         // Db::name('table')->where('id', 3)->select();
         // halt($_GET);
         // halt(Request::param());

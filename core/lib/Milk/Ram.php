@@ -18,7 +18,6 @@ class Ram
 
     protected static $action = '';
 
-
     protected static function includeFile($file)
     {
         if (!file_exists($file)) {

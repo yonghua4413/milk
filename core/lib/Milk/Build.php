@@ -16,6 +16,7 @@ class Build extends Ram
     {
         $controller = $this->getController();
         $url = $this->cancelArgs($controller);
+        $this->setUrl($url);
 
         // get action
         $action = explode('/', $url)[2];
@@ -83,5 +84,13 @@ class Build extends Ram
             $classNameFile = str_replace(['s=//', HTML_EXT], ['', ''], $classNameFile);
         }
         return $classNameFile;
+    }
+
+    private function setUrl($url)
+    {
+        $arr = explode('/', $url);
+        self::$module = self::$module ?: $arr[0];
+        self::$controller = self::$controller ?: $arr[1];
+        self::$action = self::$action ?: $arr[2];
     }
 }

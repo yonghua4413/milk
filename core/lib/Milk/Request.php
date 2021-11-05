@@ -10,7 +10,7 @@
 
 namespace Milk;
 
-class Request
+class Request extends Ram
 {
 
     public static function param($key = '')
@@ -63,5 +63,20 @@ class Request
     public static function post($key = '')
     {
         return $key == '' ? self::filter($_POST) : self::filter($_POST[$key]);
+    }
+
+    public static function getModule()
+    {
+        return self::$module;
+    }
+
+    public static function getController()
+    {
+        return self::$controller;
+    }
+
+    public static function getAction()
+    {
+        return self::$action;
     }
 }

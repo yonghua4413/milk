@@ -15,7 +15,7 @@ ini_set('error_reporting', E_ALL);
 define('ROOT_PATH', __DIR__ . '/../');
 define('APP_PATH', ROOT_PATH . 'app/');
 define('CONFIG_PATH', ROOT_PATH . 'config/');
-define('RUNTIME', ROOT_PATH . 'runtime/');
+define('RUNTIME_PATH', ROOT_PATH . 'runtime/');
 
 define('PHP_EXT', '.php');
 define('HTML_EXT', '.html');
