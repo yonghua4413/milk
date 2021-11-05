@@ -13,7 +13,10 @@ namespace Milk;
 class Controller
 {
 
-    public function action()
+    protected $request = '';
+
+    public function __construct()
     {
+        $this->request = $this->request ?: new Request();
     }
 }

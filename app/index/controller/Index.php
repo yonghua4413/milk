@@ -3,7 +3,6 @@
 namespace app\index\controller;
 
 use Milk\Controller;
-use Milk\Request;
 use Milk\Db;
 
 class Index extends Controller
@@ -13,6 +12,7 @@ class Index extends Controller
     {
         echo 'hello world';
         echo '<br>';
+        halt($this->request->param());
         // Db::name('table')->where('id', 3)->select();
         // halt($_GET);
         // halt(Request::param());
