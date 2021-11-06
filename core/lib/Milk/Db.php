@@ -10,6 +10,8 @@
 
 namespace Milk;
 
+use Milk\Db\Drive;
+
 class Db
 {
     private static $config = [];
@@ -21,6 +23,6 @@ class Db
 
     private static function register(...$args)
     {
-        halt($args);
+        Drive::bind($args);
     }
 }

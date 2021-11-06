@@ -14,14 +14,8 @@ class Index extends Controller
         echo 'hello world';
         echo '<br>';
 
-        $html = 'Milk是一个免费开源的，快速、简单的面向对象的轻量级PHP开发框架';
-        $arr = [
-            'id' => 1,
-            'name' => '张三'
-        ];
-        View::assign('info', $html);
-        View::assign('arr', $arr);
-        View::fetch();
+        Db::name('dbtest')->where('id', 1)->find();
+
         // halt($this->request->param())
         // halt($this->request->param());
         // Db::name('table')->where('id', 3)->select();
@@ -30,8 +24,15 @@ class Index extends Controller
 
     }
 
-    public function test()
+    public function view()
     {
-        echo '123';
+        $html = 'Milk是一个免费开源的，快速、简单的面向对象的轻量级PHP开发框架';
+        $arr = [
+            'id' => 1,
+            'name' => '张三'
+        ];
+        View::assign('info', $html);
+        View::assign('arr', $arr);
+        View::fetch();
     }
 }
