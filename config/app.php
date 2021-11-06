@@ -17,4 +17,6 @@ return [
     'default_controller'    => 'index',
     // 默认方法
     'default_action'        => 'index',
+    // 默认模板后缀
+    'default_template_ext'  => 'html',
 ];

@@ -10,30 +10,39 @@
 
 namespace Milk;
 
-class View extends Ram
+class View extends Compile
 {
-    private static $arrayConfig = array(
-        'suffix'        => HTML_EXT,                 // 模板的后缀
-        'templateDir'   => '',                          // 模板所在的文件夹
-        'compileDir'    => RUNTIME_PATH,                   // 编译后存放的目录
-        'cache_html'    => false,                       // 是否需要编译成静态的html文件
-        'cache_time'    => 0,                           // 设置多长时间自动更新
-        'php_turn'      => true,                        // 设置是否支持php原生代码
-        'debug'         => false,
-    );
-
     public static $fileHtml = '';
 
     public static function fetch($filehtml = '')
     {
-        static::$fileHtml = empty($filehtml) ? self::$action : $filehtml;
+        static::$fileHtml = empty($filehtml) ? Request::getAction() : $filehtml;
 
         if (!is_dir(RUNTIME_PATH)) {
             File::createdir(RUNTIME_PATH);
         }
 
         if (!is_writable(RUNTIME_PATH)) {
-            echo RUNTIME_PATH . 'is not permession \r\n';
+            echo RUNTIME_PATH . ' is not permession \r\n';
         }
+        self::$template = static::getViewPath();
+        if (!file_exists(self::$template)) {
+            echo self::$template . ' template file not found.\r\n';
+        }
+
+        self::$runtime = RUNTIME_PATH . md5(self::$template) . '.php';
+        self::build();
+        include self::$runtime;
+    }
+
+    public static function assign(...$args)
+    {
+        if (count($args) < 2) echo 'function assign at least two parameter';
+        self::$value[$args[0]] = $args[1];
+    }
+
+    private static function getViewPath()
+    {
+        return APP_PATH . Request::getModule() . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . Request::getController() . DIRECTORY_SEPARATOR . Request::getAction() . '.' . Config::get('app.default_template_ext');
     }
 }
