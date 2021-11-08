@@ -14,7 +14,8 @@ class Index extends Controller
         echo 'hello world';
         echo '<br>';
 
-        Db::name('dbtest')->where('id', 3);
+        $res = Db::name('user')->where('id', 1)->select();
+        halt($res);
 
         // halt($this->request->param())
         // halt($this->request->param());
