@@ -20,7 +20,7 @@ abstract class Drive
         $type = Config::get('database.type') ?: 'mysql';
         $dbClass = __NAMESPACE__ . '\\' . ucwords($type);
         $method = $args[0];
-        return $dbClass::$method($args[1]);
+        return $dbClass::$method($args[1][0]);
     }
     // /**
     //  * 数据库驱动绑定
