@@ -139,6 +139,33 @@ class Mysql extends Drive
         return $res;
     }
 
+    private function update($data)
+    {
+        // No condition stop update (Security considerations)
+        if (!trim(self::$where)) return 0;
+        $data = $this->dataFormat(self::$tableName, $data[0]);
+        if (!$data) return 0;
+        $arr = [];
+        foreach ($data as $key => $value) {
+            $arr[] = $key . '=' . $value;
+        }
+        $table = self::$tableName;
+        $where = self::$where;
+        $value = implode(',', $arr);
+        $sql = htmlentities("UPDATE {$table} SET {$value} {$where}");
+        return self::$db->exec($sql);
+    }
+
+    private function delete()
+    {
+        // No condition stop update (Security considerations)
+        if (!trim(self::$where)) return 0;
+        $table = self::$tableName;
+        $where = self::$where;
+        $sql = htmlentities("DELETE FROM {$table} {$where}");
+        return self::$db->exec($sql);
+    }
+
     private function select()
     {
         return self::getData(true);
