@@ -22,6 +22,7 @@ class Mysql extends Drive
     private static $sql;
     private static $field;
     private static $db;
+    private static $alias = [];
 
     public function __call($name, $arguments)
     {
@@ -83,6 +84,12 @@ class Mysql extends Drive
             $num != 2 ?: array_splice($args, 1, 0, '=');
             static::$where .= "{$args['0']} {$args[1]} '{$args[2]}' ";
         }
+        return static::$instance;
+    }
+
+    public function alias($var)
+    {
+        array_push(self::$alias, $var);
         return static::$instance;
     }
 
@@ -174,6 +181,19 @@ class Mysql extends Drive
     private function find()
     {
         return self::getData();
+    }
+
+    private function value($field)
+    {
+        $res = $this->find();
+        if (!empty($res)) {
+            if (array_key_exists($field[0], $res)) {
+                return $res[$field[0]];
+            } else {
+                halt("Undefined index: {$field[0]}");
+            }
+        }
+        return false;
     }
 
     private static function getData($batch = false)
