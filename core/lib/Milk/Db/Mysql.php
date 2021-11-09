@@ -59,12 +59,12 @@ class Mysql extends Drive
         return static::register($name, Config::get('database.prefix'));
     }
 
-    private static function register($name = null, $prefix = null)
+    private static function register($name, $prefix = null)
     {
         if (!static::$instance instanceof self) {
             static::$instance = new self();
         }
-        if (!is_null($name)) static::$tableName = is_null($prefix) ? $name : $prefix . $name;
+        static::$tableName = is_null($prefix) ? $name : $prefix . $name;
         return static::$instance;
     }
 
@@ -221,7 +221,6 @@ class Mysql extends Drive
     public static function startTrans()
     {
         self::connection();
-        self::register();
         if (!self::$transaction) {
             self::$transaction = true;
             self::$db->beginTransaction();

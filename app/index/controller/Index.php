@@ -19,12 +19,12 @@ class Index extends Controller
         ];
 
         Db::startTrans();
-        $res = Db::name('user')->insert(['username' => '小罗', 'password' => '124334534']);
+        $res = Db::name('user')->insert(['username' => '吴凯', 'password' => '124334534']);
         if (!$res) {
             echo '失败';
             Db::rollBack();
         }
-        $res1 = Db::name('goods')->where('id', 2)->update(['user' => 2, 'name' => '公寓']);
+        $res1 = Db::name('goods')->where('id', 2)->update(['user' => 2, 'name' => '宿舍']);
         if (!$res1) {
             echo '失败2';
             Db::rollBack();
