@@ -23,9 +23,12 @@ class Mysql extends Drive
     private static $field;
     private static $db;
 
-    public static function __callStatic($name, $arguments)
+    public function __call($name, $arguments)
     {
-        // halt($name);
+        if (is_null(self::$db)) {
+            self::connection();
+        }
+        return $this->$name($arguments);
     }
 
     private static function connection()
@@ -40,7 +43,7 @@ class Mysql extends Drive
                 self::$db->exec('SET NAMES ' . self::$config['charset']);
             }
         } catch (\PDOException $e) {
-            dir('Connection failed: ' . $e->getMessage());
+            die('Connection failed: ' . $e->getMessage());
         }
     }
 
@@ -83,12 +86,65 @@ class Mysql extends Drive
         return static::$instance;
     }
 
-    public function select()
+    private function insert($data)
+    {
+        $data = $this->dataFormat(self::$tableName, $data[0]);
+        if (!$data) return 0;
+        $table = self::$tableName;
+        $field = implode(',', array_keys($data));
+        $value = implode(',', array_values($data));
+        // $sql = "insert into {$table} ({$field}) value({$value})";
+        $sql = htmlentities("INSERT INTO {$table} ({$field}) VALUES ($value)");
+        // halt($sql);
+        return self::$db->exec($sql);
+    }
+
+    private function dataFormat($tableName, $data)
+    {
+        if (!is_array($data)) return [];
+        $tableColumn = $this->tablefield($tableName);
+        $res = [];
+        foreach ($data as $key => $value) {
+            if (!is_scalar($value)) continue;
+            if (array_key_exists($key, $tableColumn)) {
+                $key = $this->addChar($key);
+                if (is_int($value)) $value = intval($value);
+                if (is_float($value)) $value = floatval($value);
+                if (is_string($value)) $value = "'" .  addslashes($value) . "'";
+                $res[$key] = $value;
+            }
+        }
+        return $res;
+    }
+
+    private function addChar(string $value)
+    {
+        if ('*' == $value || false !== strpos($value, '(') || false !== strpos($value, '.') || false !== strpos($value, '`')) {
+        } elseif (false === strpos($value, '`')) {
+            $value = '`' . trim($value) . '`';
+        }
+        return $value;
+    }
+
+    private function tablefield($tableName)
+    {
+        $sql = 'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME="' . $tableName . '"AND TABLE_SCHEMA="' . self::$config['database'] . '"';
+        $sth = self::$db->prepare($sql);
+        $sth->execute();
+        $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $res = [];
+        foreach ($result as $key => $value) {
+            $res[$value['COLUMN_NAME']] = 1;
+        }
+        return $res;
+    }
+
+    private function select()
     {
         return self::getData(true);
     }
 
-    public function find()
+    private function find()
     {
         return self::getData();
     }
@@ -96,7 +152,6 @@ class Mysql extends Drive
     private static function getData($batch = false)
     {
         $sql = self::getSelectSql();
-        self::connection();
         $sql = htmlspecialchars($sql);
         $sth = self::$db->prepare($sql);
         $sth->execute();
@@ -117,5 +172,10 @@ class Mysql extends Drive
         self::$sql .= ' ' . self::$where;
 
         return self::$sql;
+    }
+
+    public function __destruct()
+    {
+        self::$db = null;
     }
 }

@@ -13,8 +13,13 @@ class Index extends Controller
     {
         echo 'hello world';
         echo '<br>';
+        $data = [
+            'username' => '吴凯',
+            'password' => '56789'
+        ];
 
-        $res = Db::name('user')->where('id', 1)->select();
+        $res = Db::name('user')->insert(['username' => '吴凯', 'password' => '1234567']);
+        // $res = Db::name('user')->where('id', 1)->select();
         halt($res);
 
         // halt($this->request->param())
