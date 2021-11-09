@@ -18,7 +18,8 @@ class Index extends Controller
             'password' => '56789'
         ];
 
-        $res = Db::name('user')->where('id', 1)->value('username');
+        $res = Db::name('user')->alias('a')->join('t_goods b', 'a.id = b.user_id')->where(['b.user_id' => 1, 'b.name' => '汽车'])->select();
+        // $res = Db::name('user')->where('id', 1)->value('username');
         // $res = Db::name('user')->where('id', 2)->delete();
         // $res = Db::name('user')->where('id', 1)->update(['username' => 'zyw', 'password' => 'fy123456']);
         // $res = Db::name('user')->where('id', 1)->select();

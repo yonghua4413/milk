@@ -22,7 +22,8 @@ class Mysql extends Drive
     private static $sql;
     private static $field;
     private static $db;
-    private static $alias = [];
+    private static $alias;
+    private static $join = [];
 
     public function __call($name, $arguments)
     {
@@ -89,7 +90,17 @@ class Mysql extends Drive
 
     public function alias($var)
     {
-        array_push(self::$alias, $var);
+        self::$alias = $var;
+        return static::$instance;
+    }
+
+    public function join($option, $where, $model = 'left')
+    {
+        $arr = [];
+        $arr['option'] = $option;
+        $arr['where'] = $where;
+        $arr['model'] = $model;
+        array_push(self::$join, $arr);
         return static::$instance;
     }
 
@@ -216,7 +227,15 @@ class Mysql extends Drive
 
         self::$sql = 'select ' . self::$field;
         self::$sql .= ' from ' . self::$tableName;
+        self::$sql .= ' ' . self::$alias;
+
+        foreach (self::$join as $key => $value) {
+            self::$sql .= " {$value['model']} join {$value['option']} on {$value['where']}";
+        }
+
         self::$sql .= ' ' . self::$where;
+
+        halt(self::$sql);
 
         return self::$sql;
     }
