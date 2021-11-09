@@ -18,12 +18,24 @@ class Index extends Controller
             'password' => '56789'
         ];
 
-        $res = Db::name('user')->alias('a')->join('t_goods b', 'a.id = b.user_id')->where(['b.user_id' => 1, 'b.name' => '汽车'])->select();
+        Db::startTrans();
+        $res = Db::name('user')->insert(['username' => '小罗', 'password' => '124334534']);
+        if (!$res) {
+            echo '失败';
+            Db::rollBack();
+        }
+        $res1 = Db::name('goods')->where('id', 2)->update(['user' => 2, 'name' => '公寓']);
+        if (!$res1) {
+            echo '失败2';
+            Db::rollBack();
+        }
+        Db::commit();
+        // $res = Db::name('user')->alias('a')->join('t_goods b', 'a.id = b.user_id')->where('b.user_id', 1)->group('b.id')->order('b.name', 'asc')->select();
         // $res = Db::name('user')->where('id', 1)->value('username');
         // $res = Db::name('user')->where('id', 2)->delete();
         // $res = Db::name('user')->where('id', 1)->update(['username' => 'zyw', 'password' => 'fy123456']);
         // $res = Db::name('user')->where('id', 1)->select();
-        halt($res);
+        halt('完成');
 
         // halt($this->request->param())
         // halt($this->request->param());

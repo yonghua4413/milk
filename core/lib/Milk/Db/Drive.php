@@ -27,7 +27,9 @@ abstract class Drive
         $type = Config::get('database.type') ?: 'mysql';
         $dbClass = __NAMESPACE__ . '\\' . ucwords($type);
         $method = $args[0];
-        return $dbClass::$method($args[1][0]);
+        // halt($args[1][0]);
+        $args = isset($args[1][0]) ? $args[1][0] : '';
+        return $dbClass::$method($args);
     }
 
     protected static function setConfig()

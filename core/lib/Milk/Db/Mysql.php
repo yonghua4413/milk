@@ -24,6 +24,11 @@ class Mysql extends Drive
     private static $db;
     private static $alias;
     private static $join = [];
+    private static $group;
+    private static $order;
+    private static $limit;
+    private static $transaction = false;
+
 
     public function __call($name, $arguments)
     {
@@ -54,13 +59,12 @@ class Mysql extends Drive
         return static::register($name, Config::get('database.prefix'));
     }
 
-    private static function register($name, $prefix = null)
+    private static function register($name = null, $prefix = null)
     {
         if (!static::$instance instanceof self) {
             static::$instance = new self();
         }
-
-        static::$tableName = is_null($prefix) ? $name : $prefix . $name;
+        if (!is_null($name)) static::$tableName = is_null($prefix) ? $name : $prefix . $name;
         return static::$instance;
     }
 
@@ -101,6 +105,26 @@ class Mysql extends Drive
         $arr['where'] = $where;
         $arr['model'] = $model;
         array_push(self::$join, $arr);
+        return static::$instance;
+    }
+
+    public function group($var)
+    {
+        self::$group = "group by {$var}";
+        return static::$instance;
+    }
+
+    public function order($field, $sort = 'desc')
+    {
+        // $field = $this->addChar($field);
+        self::$order = "order by {$this->addChar($field)} {$sort}";
+        return self::$instance;
+    }
+
+    public function limit($page, $limit)
+    {
+        $page = intval($page - 1 * $limit);
+        self::$limit = "limit {$page} , {$limit}";
         return static::$instance;
     }
 
@@ -194,6 +218,37 @@ class Mysql extends Drive
         return self::getData();
     }
 
+    public static function startTrans()
+    {
+        self::connection();
+        self::register();
+        if (!self::$transaction) {
+            self::$transaction = true;
+            self::$db->beginTransaction();
+        }
+        return self::$instance;
+    }
+
+    public static function commit()
+    {
+        $res = false;
+        if (self::$transaction) {
+            self::$transaction = false;
+            $res = self::$db->commit();
+        }
+        return $res;
+    }
+
+    public static function rollBack()
+    {
+        $res = false;
+        if (self::$transaction) {
+            self::$transaction = false;
+            $res = self::$db->rollBack();
+        }
+        return $res;
+    }
+
     private function value($field)
     {
         $res = $this->find();
@@ -223,19 +278,34 @@ class Mysql extends Drive
 
     private static function getSelectSql()
     {
+        /**     sql exec order
+         * 1    from
+         * 2    join
+         * 3    on
+         * 4    where
+         * 5    group by
+         * 6    avg,sum...
+         * 7    having
+         * 8    select
+         * 9    distinct
+         * 10   order by
+         * 11   limit
+         */
         self::$field = empty(self::$field) ? "*" : self::$field;
 
         self::$sql = 'select ' . self::$field;
         self::$sql .= ' from ' . self::$tableName;
-        self::$sql .= ' ' . self::$alias;
+        empty(self::$alias) ?: self::$sql .= ' ' . self::$alias;
 
         foreach (self::$join as $key => $value) {
             self::$sql .= " {$value['model']} join {$value['option']} on {$value['where']}";
         }
 
         self::$sql .= ' ' . self::$where;
-
-        halt(self::$sql);
+        empty(self::$group) ?: self::$sql .= ' ' . self::$group;
+        empty(self::$order) ?: self::$sql .= ' ' . self::$order;
+        empty(self::$limit) ?: self::$sql .= ' ' . self::$limit;
+        // halt(self::$sql);
 
         return self::$sql;
     }
