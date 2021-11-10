@@ -28,6 +28,7 @@ class Mysql extends Drive
     private static $order;
     private static $limit;
     private static $transaction = false;
+    private static $showSql = false;
 
 
     public function __call($name, $arguments)
@@ -36,6 +37,12 @@ class Mysql extends Drive
             self::connection();
         }
         return $this->$name($arguments);
+    }
+
+    public static function __callStatic($name, $arguments)
+    {
+        if (is_null(self::$db)) self::connection();
+        return self::$name($arguments[0]);
     }
 
     private static function connection()
@@ -261,6 +268,34 @@ class Mysql extends Drive
         return false;
     }
 
+    public function fetchSql()
+    {
+        self::$showSql = true;
+        return self::$instance;
+    }
+
+    private static function exec($sql)
+    {
+        $firstOne = strtolower(explode(' ', $sql)[0]);
+        $where = ['select', 'show'];
+        $sql = htmlspecialchars($sql);
+        if (in_array($firstOne, $where)) {
+            $sth = self::$db->prepare($sql);
+            $sth->execute();
+            $res = $sth->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $res = self::$db->exec($sql);
+        }
+        return $res;
+    }
+
+    // private static function exec(string $sql): int
+    // {
+    //     // self::_connection();
+    //     // self::resetParam();
+    //     // return self::$_dbh->exec($sql);
+    // }
+
     private static function getData($batch = false)
     {
         $sql = self::getSelectSql();
@@ -305,6 +340,7 @@ class Mysql extends Drive
         empty(self::$order) ?: self::$sql .= ' ' . self::$order;
         empty(self::$limit) ?: self::$sql .= ' ' . self::$limit;
         // halt(self::$sql);
+        if (self::$showSql) echo self::$sql;
 
         return self::$sql;
     }
