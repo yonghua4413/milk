@@ -23,11 +23,11 @@ class View extends Compile
         }
 
         if (!is_writable(RUNTIME_PATH)) {
-            echo RUNTIME_PATH . ' is not permession \r\n';
+            throw new Exception(RUNTIME_PATH . ' is not permession \r\n');
         }
         self::$template = static::getViewPath();
         if (!file_exists(self::$template)) {
-            echo self::$template . ' template file not found.\r\n';
+            throw new Exception(self::$template . ' template file not found.\r\n');
         }
 
         self::$runtime = RUNTIME_PATH . md5(self::$template) . '.php';

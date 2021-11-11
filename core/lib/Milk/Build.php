@@ -38,7 +38,7 @@ class Build extends Ram
     private function funcExist($obj, $action)
     {
         if (!method_exists($obj, $action)) {
-            echo "class " . get_class($obj) . " has not " . $action . " method.\r\n";
+            throw new Exception("class " . get_class($obj) . " has not " . $action . " method.\r\n");
         }
     }
 

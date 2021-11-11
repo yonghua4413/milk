@@ -27,7 +27,7 @@ class App
         // Handle path
         $className = str_replace(['\\', 'app', '//'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR . 'app', ''], $className);
         if (!file_exists($className)) {
-            echo "\"{$className}\" class not found. \r\n";
+            throw new Exception("\"{$className}\" class not found. \r\n");
         }
 
         include $className;

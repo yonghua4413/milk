@@ -21,7 +21,7 @@ class Ram
     protected static function includeFile($file)
     {
         if (!file_exists($file)) {
-            echo "【{$file}】 file not find.\r\n";
+            throw new Exception("【{$file}】 file not find.\r\n");
         } else {
             return include $file;
         }

@@ -5,6 +5,7 @@ namespace app\index\controller;
 use Milk\Controller;
 use Milk\Db;
 use Milk\View;
+use Milk\Test;
 
 class Index extends Controller
 {
@@ -17,8 +18,7 @@ class Index extends Controller
             'username' => '吴凯',
             'password' => '56789'
         ];
-
-        $res = Db::exec("SELECT * from t_user WHERE password = '123123'");
+        // $res = Db::exec("SELECT * from t_user WHERE password = '123123'");
         // $res = Db::name('user')->where('id', 1)->fetchSql()->find();
         // Db::startTrans();
         // $res = Db::name('user')->insert(['username' => '吴凯', 'password' => '124334534']);
@@ -33,7 +33,7 @@ class Index extends Controller
         // }
         // Db::commit();
         // $res = Db::name('user')->alias('a')->join('t_goods b', 'a.id = b.user_id')->where('b.user_id', 1)->group('b.id')->order('b.name', 'asc')->select();
-        // $res = Db::name('user')->where('id', 1)->value('username');
+        $res = Db::name('user')->where('id', 1)->value();
         // $res = Db::name('user')->where('id', 2)->delete();
         // $res = Db::name('user')->where('id', 1)->update(['username' => 'zyw', 'password' => 'fy123456']);
         // $res = Db::name('user')->where('id', 1)->select();

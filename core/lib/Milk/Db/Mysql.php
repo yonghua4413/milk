@@ -10,6 +10,7 @@
 
 namespace Milk\Db;
 
+use Exception;
 use Milk\Config;
 use PDO;
 
@@ -57,7 +58,7 @@ class Mysql extends Drive
                 self::$db->exec('SET NAMES ' . self::$config['charset']);
             }
         } catch (\PDOException $e) {
-            die('Connection failed: ' . $e->getMessage());
+            throw new \Milk\Exception('Connection failed: ' . $e->getMessage());
         }
     }
 
@@ -259,10 +260,13 @@ class Mysql extends Drive
     {
         $res = $this->find();
         if (!empty($res)) {
+            if (empty($field)) {
+                throw new \Milk\Exception("Undefined index");
+            }
             if (array_key_exists($field[0], $res)) {
                 return $res[$field[0]];
             } else {
-                halt("Undefined index: {$field[0]}");
+                throw new \Milk\Exception("Undefined index: {$field[0]}");
             }
         }
         return false;
