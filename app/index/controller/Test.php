@@ -4,13 +4,16 @@ namespace app\index\controller;
 
 use Milk\Controller;
 use Milk\Request;
+use Milk\Session;
 
 class Test extends Base
 {
 
     public function index()
     {
-        halt(Request::param());
-        self::arr();
+        $res = Session::get('name');
+        halt($res);
+        // halt(Request::param());
+        // self::arr();
     }
 }

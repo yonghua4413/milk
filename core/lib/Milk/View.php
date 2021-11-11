@@ -14,7 +14,7 @@ class View extends Compile
 {
     public static $fileHtml = '';
 
-    public static function fetch($filehtml = '')
+    public static function display($filehtml = '')
     {
         static::$fileHtml = empty($filehtml) ? Request::getAction() : $filehtml;
 

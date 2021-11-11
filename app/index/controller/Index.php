@@ -4,6 +4,7 @@ namespace app\index\controller;
 
 use Milk\Controller;
 use Milk\Db;
+use Milk\Session;
 use Milk\View;
 use Milk\Test;
 
@@ -18,6 +19,11 @@ class Index extends Controller
             'username' => '吴凯',
             'password' => '56789'
         ];
+        Session::set('name', $data);
+        // $this->view->assign('arr', $data);
+        // $this->view->assign('info', '杰哥来了');
+        // $this->view->fetch();
+
         // $res = Db::exec("SELECT * from t_user WHERE password = '123123'");
         // $res = Db::name('user')->where('id', 1)->fetchSql()->find();
         // Db::startTrans();
@@ -33,11 +39,11 @@ class Index extends Controller
         // }
         // Db::commit();
         // $res = Db::name('user')->alias('a')->join('t_goods b', 'a.id = b.user_id')->where('b.user_id', 1)->group('b.id')->order('b.name', 'asc')->select();
-        $res = Db::name('user')->where('id', 1)->value();
+        // $res = Db::name('user')->where('id', 1)->value('username');
         // $res = Db::name('user')->where('id', 2)->delete();
         // $res = Db::name('user')->where('id', 1)->update(['username' => 'zyw', 'password' => 'fy123456']);
         // $res = Db::name('user')->where('id', 1)->select();
-        halt($res);
+        // halt($res);
 
         // halt($this->request->param())
         // halt($this->request->param());
