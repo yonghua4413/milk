@@ -20,6 +20,12 @@ class Index extends Controller
             'password' => '56789'
         ];
         Session::set('name', $data);
+        Session::set('info', '123435');
+        // Session::clear();
+        // Session::destroy();
+        $res = Session::get();
+        // Session::delete('name');
+        halt($res);
         // $this->view->assign('arr', $data);
         // $this->view->assign('info', '杰哥来了');
         // $this->view->fetch();

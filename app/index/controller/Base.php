@@ -3,12 +3,13 @@
 namespace app\index\controller;
 
 use Milk\Controller;
+use Milk\Session;
 
 class Base extends Controller
 {
 
-    public function arr()
+    public function __construct()
     {
-        echo '我是base';
+        
     }
 }
