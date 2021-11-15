@@ -27,6 +27,7 @@ class Build extends Ram
         $obj = new $classNameFile;
         $this->funcExist($obj, $action);
 
+        Middleware::beforeHandle();
         // start
         $args = $this->getArgs($classNameFile, $action);
         $res = call_user_func([$obj, $action], ...$args);
@@ -35,6 +36,7 @@ class Build extends Ram
         } elseif (is_array($res)) {
             halt($res);
         }
+        Middleware::afterHandle();
     }
 
     public function getArgs($classNameFile, $action)

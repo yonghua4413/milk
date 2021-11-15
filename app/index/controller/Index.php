@@ -4,6 +4,7 @@ namespace app\index\controller;
 
 use Milk\Controller;
 use Milk\Db;
+use Milk\Middleware;
 use Milk\Session;
 use Milk\View;
 use Milk\Test;
@@ -16,7 +17,7 @@ class Index extends Controller
         echo 'hello world';
         echo '<br>';
         $data = [
-            'username' => '吴凯',
+            'username' => '冯毅',
             'password' => '56789'
         ];
         Session::set('name', $data);
@@ -64,6 +65,12 @@ class Index extends Controller
         echo 'hello' . $name;
     }
 
+
+    public function getclass()
+    {
+        // app\middleware\CheckLogin
+        Middleware::getProperties('app\index\middleware\Test');
+    }
     public function view()
     {
         $html = 'Milk是一个免费开源的，快速、简单的面向对象的轻量级PHP开发框架';
