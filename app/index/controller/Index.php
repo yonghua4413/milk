@@ -26,7 +26,7 @@ class Index extends Controller
         // Session::destroy();
         $res = Session::get();
         // Session::delete('name');
-        halt($res);
+        // halt($res);
         // $this->view->assign('arr', $data);
         // $this->view->assign('info', '杰哥来了');
         // $this->view->fetch();

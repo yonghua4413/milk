@@ -11,10 +11,11 @@
 return [
     // 注册全局中间件
     'all' => [
-        'app\index\middleware\Test'
+        // 'app\index\middleware\Test'
     ],
     // 注册路由中间件
     'route' => [
-        'app\index\index\index' => 'app\index\middleware\Test2'
+        'index\test\*' => 'app\index\middleware\Test2',
+        // 'index\index\index' => 'app\index\middleware\Test3'
     ]
 ];
