@@ -8,7 +8,13 @@
  * © Milk framework
  */
 
-// 全局中间件注册
 return [
-    'app\index\middleware\Test'
+    // 注册全局中间件
+    'all' => [
+        'app\index\middleware\Test'
+    ],
+    // 注册路由中间件
+    'route' => [
+        'app\index\index\index' => 'app\index\middleware\Test2'
+    ]
 ];

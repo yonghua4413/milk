@@ -34,7 +34,7 @@ class Middleware
 
     private static function getConfig()
     {
-        return Config::get('middleware');
+        return Config::get('middleware.all');
     }
 
     /**
