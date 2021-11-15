@@ -28,13 +28,27 @@ class Build extends Ram
         $this->funcExist($obj, $action);
 
         // start
-        $res = call_user_func([$obj, $action]);
+        $args = $this->getArgs($classNameFile, $action);
+        $res = call_user_func([$obj, $action], ...$args);
         if (is_string($res)) {
             echo $res;
         } elseif (is_array($res)) {
             halt($res);
         }
     }
+
+    public function getArgs($classNameFile, $action)
+    {
+        $class = new \ReflectionMethod($classNameFile, $action);
+        $args = $class->getParameters();
+
+        $data = [];
+        foreach ($args as $key => $value) {
+            array_push($data, Request::get($value->name));
+        }
+        return $data;
+    }
+
     private function funcExist($obj, $action)
     {
         if (!method_exists($obj, $action)) {
