@@ -1,3 +1,8 @@
 {
-    "name": "ttitt/milk"
+    "name": "ttitt/milk",
+    "autoload": {
+        "psr-4": {
+            "Milk\\": "app/"
+        }
+    },
 }
